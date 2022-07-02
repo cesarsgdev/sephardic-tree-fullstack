@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const { Schema } = mongoose;
 
@@ -30,6 +32,20 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", function (next) {
+  const user = this;
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    if (err) throw err;
+    bcrypt.hash(user.password, salt, function (err, hash) {
+      if (err) throw err;
+      else {
+        user.password = hash;
+        next();
+      }
+    });
+  });
+});
 
 const userModel = mongoose.model("users", userSchema);
 

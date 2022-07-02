@@ -1,8 +1,18 @@
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
 const users = require("./routes/usersRoute");
-
 require("dotenv").config();
+
+// Connect to DB
+try {
+  mongoose.connect(process.env.DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+} catch (e) {
+  console.log(e.message);
+}
 
 const PORT = process.env.PORT || 3001;
 

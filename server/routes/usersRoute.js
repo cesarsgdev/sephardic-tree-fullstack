@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../models/userModel");
 
 // Route to get all users => GET /api/users
 router.get("/", async (req, res) => {
@@ -15,7 +16,13 @@ router.get("/:id", async (req, res) => {
 
 // Route to create a new user => POST /api/users
 router.post("/", async (req, res) => {
-  res.status(200).json({ message: `New user created...` });
+  try {
+    const user = new User(req.body);
+    await user.save();
+    res.status(200).json({ success: true, data: user });
+  } catch (e) {
+    res.status(400).json({ success: false, message: `${e.message}` });
+  }
 });
 
 // Route to update a single user by id => PUT /api/users/:id
