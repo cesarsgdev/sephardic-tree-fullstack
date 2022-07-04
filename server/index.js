@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const users = require("./routes/usersRoute");
+const login = require("./routes/loginRoute");
 require("dotenv").config();
 
 // Connect to DB
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/users", users);
+app.use("/api/login", login);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: `This is the main route` });
