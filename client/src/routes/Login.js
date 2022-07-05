@@ -33,8 +33,14 @@ const Login = () => {
               changeActiveForm={changeActiveForm}
             ></LoginForm>
           )}
-          {activeForm === "register" && <RegisterForm></RegisterForm>}
-          {activeForm === "password" && <LostPasswordForm></LostPasswordForm>}
+          {activeForm === "register" && (
+            <RegisterForm changeActiveForm={changeActiveForm}></RegisterForm>
+          )}
+          {activeForm === "password" && (
+            <LostPasswordForm
+              changeActiveForm={changeActiveForm}
+            ></LostPasswordForm>
+          )}
         </section>
       </LoginContainer>
     </>

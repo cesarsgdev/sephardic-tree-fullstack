@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const RegisterForm = () => {
+const RegisterForm = ({ changeActiveForm }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
@@ -30,6 +30,17 @@ const RegisterForm = () => {
 
         <input type="submit" value="Register" />
       </form>
+      <div className="loginOptions">
+        <p>
+          <button
+            onClick={(e) => {
+              changeActiveForm("login");
+            }}
+          >
+            Back to login
+          </button>
+        </p>
+      </div>
     </>
   );
 };
