@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
+import LostPasswordForm from "../components/LostPasswordForm";
 
 const Login = () => {
   const [logedIn, setLogedIn] = useState(false);
@@ -33,6 +34,7 @@ const Login = () => {
             ></LoginForm>
           )}
           {activeForm === "register" && <RegisterForm></RegisterForm>}
+          {activeForm === "password" && <LostPasswordForm></LostPasswordForm>}
         </section>
       </LoginContainer>
     </>

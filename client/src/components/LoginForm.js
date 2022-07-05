@@ -69,7 +69,14 @@ const LoginForm = ({ changeStatus, changeActiveForm }) => {
           </button>
         </p>
         <p>
-          Lost password? <button>Click here</button>
+          Lost password?{" "}
+          <button
+            onClick={(e) => {
+              changeActiveForm("password");
+            }}
+          >
+            Click here
+          </button>
         </p>
       </div>
     </>
