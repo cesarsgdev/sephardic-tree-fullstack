@@ -47,7 +47,7 @@ export const LoginContainer = styled.main`
   }
 
   & section form {
-    width: 50%;
+    width: 65%;
     display: flex;
     flex-flow: column;
     gap: 20px;
