@@ -70,6 +70,11 @@ export const LoginContainer = styled.main`
     border-radius: 5px;
   }
 
+  & form input[type="text"]:focus,
+  form input[type="password"]:focus {
+    outline: 2px solid rgba(0, 128, 0, 1);
+  }
+
   & form input[type="submit"] {
     font-family: "PT Sans", sans-serif;
     font-size: 18px;
@@ -78,7 +83,12 @@ export const LoginContainer = styled.main`
     border-radius: 5px;
     background: rgba(0, 128, 0, 1);
     color: #fff;
+    transition: 0.5s;
     cursor: pointer;
+  }
+
+  & form input[type="submit"]:hover {
+    background: rgba(0, 165, 0, 1);
   }
 
   & .loginOptions button {

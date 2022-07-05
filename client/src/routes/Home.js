@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 const Home = () => {
   const navigate = useNavigate();
   return (
     <>
-      <h1>This is home!</h1>
+      <Loader whatsLoading="trees"></Loader>
       <button
         onClick={() => {
           localStorage.removeItem("token");

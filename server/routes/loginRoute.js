@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
         const token = jwt.sign(
           { _id: user._id, email: user.email },
           "rayados",
-          { expiresIn: 10 }
+          { expiresIn: "10h" }
         );
 
         res.status(200).json({ success: true, token: token });
