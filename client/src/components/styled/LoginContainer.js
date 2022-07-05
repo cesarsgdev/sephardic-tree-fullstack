@@ -80,4 +80,14 @@ export const LoginContainer = styled.main`
     color: #fff;
     cursor: pointer;
   }
+
+  & .loginOptions button {
+    background: transparent;
+    border: none;
+    font-family: "PT Sans";
+    font-size: 18px;
+    color: rgb(116, 80, 29);
+    font-weight: 700;
+    cursor: pointer;
+  }
 `;

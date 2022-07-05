@@ -4,13 +4,19 @@ import logo from "../logo.svg";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
 
 const Login = () => {
   const [logedIn, setLogedIn] = useState(false);
+  const [activeForm, setActiveForm] = useState("login");
   const token = localStorage.getItem("token");
 
   const changeStatus = () => {
     setLogedIn(true);
+  };
+
+  const changeActiveForm = (active) => {
+    setActiveForm(active);
   };
 
   if (logedIn || token) return <Navigate to="/" />;
@@ -20,16 +26,13 @@ const Login = () => {
         <ImagesLogin></ImagesLogin>
         <section>
           <img alt="logo" src={logo} />
-          <h1>Log in to your account</h1>
-          <LoginForm changeStatus={changeStatus}></LoginForm>
-          <div className="loginOptions">
-            <p>
-              Don't have an account? <button>Sign up</button>
-            </p>
-            <p>
-              Lost password? <button>Click here</button>
-            </p>
-          </div>
+          {activeForm === "login" && (
+            <LoginForm
+              changeStatus={changeStatus}
+              changeActiveForm={changeActiveForm}
+            ></LoginForm>
+          )}
+          {activeForm === "register" && <RegisterForm></RegisterForm>}
         </section>
       </LoginContainer>
     </>

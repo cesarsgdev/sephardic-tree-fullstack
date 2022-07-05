@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const LoginForm = ({ changeStatus }) => {
+const LoginForm = ({ changeStatus, changeActiveForm }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = (e) => {
@@ -32,6 +32,7 @@ const LoginForm = ({ changeStatus }) => {
   };
   return (
     <>
+      <h1>Log in to your account</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -56,6 +57,21 @@ const LoginForm = ({ changeStatus }) => {
 
         <input type="submit" value="Login" />
       </form>
+      <div className="loginOptions">
+        <p>
+          Don't have an account?{" "}
+          <button
+            onClick={(e) => {
+              changeActiveForm("register");
+            }}
+          >
+            Sign up
+          </button>
+        </p>
+        <p>
+          Lost password? <button>Click here</button>
+        </p>
+      </div>
     </>
   );
 };
