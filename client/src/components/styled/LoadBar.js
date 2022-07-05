@@ -15,13 +15,13 @@ export const LoadBar = styled.div`
   position: relative;
   width: 500px;
   height: 15px;
-  background: rgba(0, 128, 0, 1);
+  background: var(--main-green);
   border-radius: 5px;
 
   & .loader {
     width: 50px;
     height: 100%;
-    background: rgba(0, 156, 0, 1);
+    background: var(--secondary-green);
     transform: rotate(-45deg);
     animation: ${moveLoader} 0.75s linear infinite;
   }

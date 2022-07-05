@@ -1,4 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap");
+
+:root {
+  --main-green: rgba(0, 128, 0, 1);
+  --secondary-green: rgba(0, 156, 0, 1);
+  --main-brown: rgba(116, 80, 29, 1);
+  --secondary-brown: rgb(82, 57, 21);
+}
 * {
   margin: 0;
   padding: 0;

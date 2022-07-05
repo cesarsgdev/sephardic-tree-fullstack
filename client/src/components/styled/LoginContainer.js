@@ -72,7 +72,7 @@ export const LoginContainer = styled.main`
 
   & form input[type="text"]:focus,
   form input[type="password"]:focus {
-    outline: 2px solid rgba(0, 128, 0, 1);
+    outline: 2px solid var(--main-green);
   }
 
   & form input[type="submit"] {
@@ -81,14 +81,14 @@ export const LoginContainer = styled.main`
     padding: 10px;
     border: 1px solid lightgray;
     border-radius: 5px;
-    background: rgba(0, 128, 0, 1);
+    background: var(--main-green);
     color: #fff;
     transition: 0.5s;
     cursor: pointer;
   }
 
   & form input[type="submit"]:hover {
-    background: rgba(0, 165, 0, 1);
+    background: var(--secondary-green);
   }
 
   & .loginOptions button {
@@ -96,7 +96,7 @@ export const LoginContainer = styled.main`
     border: none;
     font-family: "PT Sans";
     font-size: 18px;
-    color: rgb(116, 80, 29);
+    color: var(--main-brown);
     font-weight: 700;
     cursor: pointer;
   }

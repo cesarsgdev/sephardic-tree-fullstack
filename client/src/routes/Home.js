@@ -4,7 +4,7 @@ const Home = () => {
   const navigate = useNavigate();
   return (
     <>
-      <Loader whatsLoading="trees"></Loader>
+      {/* <Loader whatsLoading="trees"></Loader> */}
       <button
         onClick={() => {
           localStorage.removeItem("token");
