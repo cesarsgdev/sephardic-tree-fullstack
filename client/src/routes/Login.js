@@ -1,4 +1,4 @@
-import { LoginContainer } from "../components/styled/LoginContainer";
+import { LoginContainer } from "../components/styled/LoginContainer.styled";
 import ImagesLogin from "../components/ImagesLogin";
 import logo from "../logo.svg";
 import { useState } from "react";

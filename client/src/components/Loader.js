@@ -1,5 +1,5 @@
-import { LoaderContainer } from "./styled/LoaderContainer";
-import { LoadBar } from "./styled/LoadBar";
+import { LoaderContainer } from "./styled/LoaderContainer.styled";
+import { LoadBar } from "./styled/LoadBar.styled";
 import logo from "../logo.svg";
 
 const Loader = ({ whatsLoading }) => {

@@ -1,4 +1,4 @@
-import { NotFoundContainer } from "../components/styled/NotFoundContainer";
+import { NotFoundContainer } from "../components/styled/NotFoundContainer.styled";
 import logo from "../logo.svg";
 
 const NotFound = () => {

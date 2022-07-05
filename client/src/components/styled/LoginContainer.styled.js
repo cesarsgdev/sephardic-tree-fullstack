@@ -91,6 +91,10 @@ export const LoginContainer = styled.main`
     background: var(--secondary-green);
   }
 
+  & .loginOptions {
+    text-align: center;
+  }
+
   & .loginOptions button {
     background: transparent;
     border: none;
