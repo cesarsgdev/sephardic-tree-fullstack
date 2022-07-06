@@ -1,0 +1,34 @@
+.overlay-enter {
+  opacity: 0;
+}
+.overlay-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+}
+.overlay-exit {
+  opacity: 1;
+}
+.overlay-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+.alert-enter {
+  transform: scale(0.1);
+  opacity: 0;
+}
+.alert-enter-active {
+  opacity: 1;
+  transform: scale(1);
+
+  transition: 500ms ease-in;
+}
+.alert-exit {
+  transform: scale(1);
+  opacity: 1;
+}
+.alert-exit-active {
+  opacity: 0;
+  transform: scale(0.1);
+  transition: 500ms ease-in;
+}

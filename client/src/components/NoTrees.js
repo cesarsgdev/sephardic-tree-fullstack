@@ -12,7 +12,7 @@ const NoTrees = () => {
         height="calc(100vh - 80px)"
       >
         <h1 className="noTrees">No trees available. Please create one.</h1>
-        <Button width="15%" height="60px" fs="24px" primary>
+        <Button width="15%" height="60px" fs="24px" primary scl>
           Create Tree
         </Button>
       </Container>

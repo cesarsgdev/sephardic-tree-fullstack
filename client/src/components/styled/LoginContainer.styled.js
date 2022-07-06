@@ -8,7 +8,7 @@ export const LoginContainer = styled.main`
 
   & > div {
     position: relative;
-    flex: 1 0 70%;
+    flex: 1 1 70%;
   }
 
   & div div.imagesOverlay {

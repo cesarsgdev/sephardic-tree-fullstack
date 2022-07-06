@@ -1,0 +1,26 @@
+const generations = [
+  "REQUERENTE",
+  "PAIS",
+  "AVÓS",
+  "BISAVÓS",
+  "TRISAVÓS",
+  "TETRAVÓS",
+  "PENTAVÓS",
+  "HEXAVÓS",
+  "HEPTAVÓS",
+  "OCTAVÓS",
+  "ENEAVÓS",
+  "DECAVÓS",
+  "UNODECAVÓS",
+  "DUODECAVÓS",
+  "TRIDECAVÓS",
+  "TETRADECAVÓS",
+  "PENTADECAVÓS",
+  "HEXADECAVÓS",
+  "HEPTADECAVÓS",
+  "OCTADECAVÓS",
+  "ENEADECAVÓS",
+  "ICOSVÓS",
+];
+
+module.exports = generations;

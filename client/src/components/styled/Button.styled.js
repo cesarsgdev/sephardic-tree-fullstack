@@ -11,5 +11,12 @@ export const Button = styled.button`
   font-size: ${({ fs }) => (fs ? fs : `18px`)};
   font-weight: 700;
   border-radius: 5px;
+  transition: 0.5s;
   cursor: pointer;
+
+  &:hover {
+    transform: ${({ scl }) => (scl ? `scale(1.02)` : null)};
+    background: ${(props) =>
+      props.primary ? `var(--secondary-green)` : `var(--secondary-brown)`};
+  }
 `;

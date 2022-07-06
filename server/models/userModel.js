@@ -30,6 +30,8 @@ const userSchema = new Schema(
       minlength: 8,
       maxlength: 50,
     },
+
+    roles: [{ type: String }],
   },
   { timestamps: true }
 );

@@ -1,10 +1,13 @@
 import { useState } from "react";
+import LoginError from "../components/LoginError";
 
 const LoginForm = ({ changeStatus, changeActiveForm }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError(false);
 
     const options = {
       method: "POST",
@@ -17,13 +20,14 @@ const LoginForm = ({ changeStatus, changeActiveForm }) => {
     fetch("api/login", options)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setEmail("");
         setPassword("");
         if (data.success) {
           localStorage.setItem("token", data.token);
           //   setLogedIn(true);
           changeStatus();
+        } else {
+          setError(data);
         }
       })
       .catch((e) => {
@@ -34,6 +38,8 @@ const LoginForm = ({ changeStatus, changeActiveForm }) => {
     <>
       <h1>Log in to your account</h1>
       <form onSubmit={handleSubmit}>
+        {error && <LoginError message={error.message} />}
+
         <label>
           Email
           <input

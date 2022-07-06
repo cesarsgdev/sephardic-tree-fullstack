@@ -3,7 +3,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Login from "./routes/Login";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 function App() {
   // const [logedIn, setLogedIn] = useState(false);

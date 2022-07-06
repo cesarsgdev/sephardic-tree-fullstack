@@ -6,15 +6,55 @@ import { Container } from "../components/styled/Container.styled";
 import { Button } from "../components/styled/Button.styled";
 import logo from "../logo.svg";
 import NoTrees from "../components/NoTrees";
+import TreeList from "../lists/TreeList";
 
 const Home = () => {
   const [treeData, setTreeData] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setTreeData([]);
-    }, 1000);
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": localStorage.getItem("token"),
+      },
+    };
+    fetch("api/trees", options)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setTreeData(data.data);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
   }, []);
+
+  const handleNewTree = () => {
+    const payLoad = {
+      generations: [],
+      uid: "62c49e0f57684a9e72992c2d",
+    };
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify(payLoad),
+    };
+
+    fetch("api/trees", options)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setTreeData([...treeData, data.data]);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+  };
 
   const navigate = useNavigate();
   return (
@@ -31,7 +71,11 @@ const Home = () => {
         >
           <img src={logo} alt="Sephardic Tree Logo" />
           <div className="buttonsHeader">
-            {treeData.length > 0 && <Button primary>New Tree</Button>}
+            {treeData.length > 0 && (
+              <Button onClick={handleNewTree} primary>
+                New Tree
+              </Button>
+            )}
             <Button
               onClick={() => {
                 localStorage.removeItem("token");
@@ -44,6 +88,7 @@ const Home = () => {
         </Container>
       </Header>
       {!treeData.length && <NoTrees />}
+      {treeData && <TreeList data={treeData} />}
     </>
   );
 };

@@ -13,8 +13,9 @@ export const Container = styled.div`
   ${({ justify }) => (justify ? "justify-content:" + justify + ";" : "")}
   ${({ align }) => (align ? "align-items:" + align + ";" : "")}
   ${({ gap }) => (gap ? "gap:" + gap + ";" : "")}
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1000px 1000px 1000px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: min-content;
+
   gap: 20px;
   ${({ pd }) => (pd ? "padding:" + pd + ";" : "padding:20px;")}
 

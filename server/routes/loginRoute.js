@@ -12,22 +12,30 @@ router.post("/", async (req, res) => {
 
     const user = await User.findOne({ email: email });
 
-    if (!user) throw Error(`User with email ${email} not found`);
+    if (!user)
+      res.status(200).json({
+        success: false,
+        error: "user",
+        message: `User with ${email} was not found.`,
+      });
 
     bcrypt.compare(password, user.password, function (err, result) {
       if (err)
-        res.status(400).json({
+        res.status(200).json({
           success: false,
+          error: "generic",
           message: `Something went wrong. Please try again.`,
         });
       if (!result) {
-        res
-          .status(400)
-          .json({ success: false, message: `Password does not match` });
+        res.status(200).json({
+          success: false,
+          error: "passsword",
+          message: `Password for user ${email} does not match.`,
+        });
       }
       if (result) {
         const token = jwt.sign(
-          { _id: user._id, email: user.email },
+          { _id: user._id, email: user.email, roles: user.roles },
           "rayados",
           { expiresIn: "10h" }
         );
@@ -36,7 +44,9 @@ router.post("/", async (req, res) => {
       }
     });
   } catch (e) {
-    res.status(400).json({ success: false, message: `${e.message}` });
+    res
+      .status(400)
+      .json({ success: false, error: `${e.cause}`, message: `${e.message}` });
   }
 });
 
