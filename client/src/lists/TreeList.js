@@ -11,6 +11,8 @@ import { AlertContainer } from "../components/styled/AlertContainer.styled";
 import ReactTooltip from "react-tooltip";
 import { CSSTransition } from "react-transition-group";
 import { Button } from "../components/styled/Button.styled";
+import { ImLeaf } from "react-icons/im";
+import { toast } from "react-toastify";
 
 import "../styles/animation.css";
 
@@ -18,12 +20,62 @@ const TreeList = ({ data }) => {
   const [overlay, setOverlay] = useState(false);
   const [alert, setAlert] = useState(false);
   const [treeName, setTreeName] = useState("");
+  const [inputStates, setInputStates] = useState(data);
+  const [oldValue, setOldValue] = useState("");
+  const [alertID, setAlertID] = useState("");
 
-  const handleAlert = (e) => {
+  const handleAlert = (e, id) => {
+    setAlertID((aid) => id);
     setTreeName((name) => e.target.parentElement.getAttribute("treename"));
-    console.log(e.target);
     setOverlay(!overlay);
   };
+
+  const handleNameEdition = (e) => {
+    e.target.removeAttribute("readOnly");
+    setOldValue((value) => e.target.value);
+  };
+
+  const handleInputChange = (e) => {
+    const index = e.target.getAttribute("data-index");
+    const temp = [...inputStates];
+    temp[index].name = e.target.value;
+    setInputStates(temp);
+  };
+
+  const handleNameUpdate = (e) => {
+    if (oldValue !== e.target.value) {
+      e.target.setAttribute("readOnly", null);
+
+      const payload = {
+        name: e.target.value,
+      };
+
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      };
+
+      fetch(`api/trees/${e.target.id}`, options)
+        .then((response) => response.json())
+        .then((data) => {
+          toast.success(`Name change completed`, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
+          console.log(data);
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
+    } else {
+      return;
+    }
+  };
+
+  const handleDeleteTree = (e) => {};
+
   return (
     <>
       <CSSTransition
@@ -62,7 +114,9 @@ const TreeList = ({ data }) => {
                 >
                   Cancel
                 </Button>
-                <Button primary>Yes</Button>
+                <Button id={alertID} primary onClick={handleDeleteTree}>
+                  Yes
+                </Button>
               </div>
             </AlertContainer>
           </CSSTransition>
@@ -72,22 +126,56 @@ const TreeList = ({ data }) => {
       <Container grid>
         <ReactTooltip />
         {data.map((tree, i) => {
-          const date = new Date(tree.createdAt);
+          const date =
+            tree.createdAt === tree.updatedAt ? new Date(tree.createdAt) : null;
+          const update =
+            tree.createdAt !== tree.updatedAt ? new Date(tree.updatedAt) : null;
           return (
-            <TreeItem key={i} treeName={tree.name}>
-              <h2>{tree.name}</h2>
-              <span>
-                Created:{" "}
-                {`${date.getDate()}/${
-                  date.getMonth() + 1
-                }/${date.getFullYear()}`}
-              </span>
+            <TreeItem key={i} treename={tree.name}>
+              <div data-tip="Generations" className="numberGenerations">
+                {tree.generations.length} <ImLeaf />
+              </div>
+              <input
+                id={tree._id}
+                onClick={handleNameEdition}
+                onBlur={handleNameUpdate}
+                onChange={handleInputChange}
+                type="text"
+                data-index={i}
+                value={inputStates[i].name}
+                readOnly
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13) {
+                    e.target.blur();
+                  }
+                }}
+              />
+              {/* <h2>{tree.name}</h2> */}
+              {date && (
+                <span>
+                  Created:{" "}
+                  {`${date.getDate()}/${
+                    date.getMonth() + 1
+                  }/${date.getFullYear()}`}
+                </span>
+              )}
+
+              {update && (
+                <span>
+                  Updated:{" "}
+                  {`${update.getDate()}/${
+                    update.getMonth() + 1
+                  }/${update.getFullYear()}`}
+                </span>
+              )}
               <div className="treeControls" treename={tree.name}>
                 <AiOutlineEye data-tip="View Tree" />
                 <IoTrashOutline
                   className="delete"
                   data-tip="Delete Tree"
-                  onClick={handleAlert}
+                  onClick={(e) => {
+                    handleAlert(e, tree._id);
+                  }}
                 />
                 <Link to={`tree/${tree._id}`}>
                   <BiEdit data-tip="Edit Tree" />

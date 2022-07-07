@@ -48,18 +48,30 @@ router.post("/", async (req, res) => {
 });
 
 // Endpoint to delete a specific tree => DELETE /api/trees/:id
-router.delete("/:id", (req, res) => {
-  res.status(200).json({
-    message: `This is the endpoint to delete a tree by specific ID. ID ${req.params.id}`,
-  });
+router.delete("/:id", async (req, res) => {
+  // res.status(200).json({
+  //   message: `This is the endpoint to delete a tree by specific ID. ID ${req.params.id}`,
+  // });
 });
 
 // Endpoint to update a specific tree by ID => PUT /api/trees/:id
 
-router.put("/:id", (req, res) => {
-  res.status(200).json({
-    message: `This is the endpoint to update a specific tree by ID. ID ${req.params.id}`,
-  });
+router.put("/:id", async (req, res) => {
+  console.log(req.body);
+  console.log(req.params.id);
+  try {
+    const tree = await Tree.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true, setDefaultsOnInsert: true, upsert: false }
+    );
+    res.status(200).json({ success: true, data: tree });
+  } catch (e) {
+    res.status(200).json({ success: false, message: `${e.message}` });
+  }
+  // res.status(200).json({
+  //   message: `This is the endpoint to update a specific tree by ID. ID ${req.params.id}`,
+  // });
 });
 
 module.exports = router;

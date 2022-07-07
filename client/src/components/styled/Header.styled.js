@@ -12,6 +12,23 @@ export const Header = styled.header`
 
   & div.buttonsHeader {
     display: flex;
-    gap: 5px;
+    gap: 20px;
+  }
+
+  & div.buttonsHeader svg {
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  & svg.newTree {
+    color: var(--main-green);
+  }
+
+  & svg.myAccount {
+    color: var(--main-brown);
+  }
+
+  & svg.logout {
+    color: var(--red);
   }
 `;

@@ -3,6 +3,8 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Login from "./routes/Login";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import { useEffect, useState } from "react";
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />}></Route>

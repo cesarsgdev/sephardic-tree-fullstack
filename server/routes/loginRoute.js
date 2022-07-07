@@ -8,12 +8,12 @@ const key = "rayados";
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
   try {
-    if (!email || !password) throw Error("Username and password are required");
+    if (!email || !password) throw Error("Username and password are required.");
 
     const user = await User.findOne({ email: email });
 
     if (!user)
-      res.status(200).json({
+      return res.status(200).json({
         success: false,
         error: "user",
         message: `User with ${email} was not found.`,
@@ -21,13 +21,13 @@ router.post("/", async (req, res) => {
 
     bcrypt.compare(password, user.password, function (err, result) {
       if (err)
-        res.status(200).json({
+        return res.status(200).json({
           success: false,
           error: "generic",
           message: `Something went wrong. Please try again.`,
         });
       if (!result) {
-        res.status(200).json({
+        return res.status(200).json({
           success: false,
           error: "passsword",
           message: `Password for user ${email} does not match.`,
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
           { expiresIn: "10h" }
         );
 
-        res.status(200).json({ success: true, token: token });
+        return res.status(200).json({ success: true, token: token });
       }
     });
   } catch (e) {

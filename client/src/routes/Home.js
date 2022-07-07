@@ -7,6 +7,14 @@ import { Button } from "../components/styled/Button.styled";
 import logo from "../logo.svg";
 import NoTrees from "../components/NoTrees";
 import TreeList from "../lists/TreeList";
+import ReactTooltip from "react-tooltip";
+import { toast } from "react-toastify";
+
+import {
+  MdAddBox,
+  MdOutlineAccountCircle,
+  MdPowerSettingsNew,
+} from "react-icons/md";
 
 const Home = () => {
   const [treeData, setTreeData] = useState(false);
@@ -49,6 +57,9 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        toast.success(`Added tree ${data.data.name}`, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
         setTreeData([...treeData, data.data]);
       })
       .catch((e) => {
@@ -61,6 +72,7 @@ const Home = () => {
     <>
       {!treeData && <Loader whatsLoading="trees"></Loader>}
       <Header>
+        <ReactTooltip />
         <Container
           flex
           flow="row nowrap"
@@ -72,18 +84,41 @@ const Home = () => {
           <img src={logo} alt="Sephardic Tree Logo" />
           <div className="buttonsHeader">
             {treeData.length > 0 && (
-              <Button onClick={handleNewTree} primary>
-                New Tree
-              </Button>
+              <MdAddBox
+                onClick={handleNewTree}
+                className="newTree"
+                data-tip="Add new Tree"
+              />
+              // <Button onClick={handleNewTree} primary>
+              //   New Tree
+              // </Button>
             )}
-            <Button
+            {/* <Button
               onClick={() => {
                 localStorage.removeItem("token");
                 navigate("/login", { replace: true });
               }}
             >
               Logout
-            </Button>
+            </Button> */}
+
+            <MdOutlineAccountCircle
+              className="myAccount"
+              data-tip="My Account"
+              onClick={() => {
+                toast.success("Clicked account!", {
+                  position: toast.POSITION.BOTTOM_RIGHT,
+                });
+              }}
+            />
+            <MdPowerSettingsNew
+              className="logout"
+              data-tip="Logout"
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/login", { replace: true });
+              }}
+            />
           </div>
         </Container>
       </Header>
