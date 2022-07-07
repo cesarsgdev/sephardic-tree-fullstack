@@ -4,7 +4,12 @@ const ControlItem = ({ icon, text, tooltip, click }) => {
   return (
     <>
       <ReactTooltip />
-      <button onClick={click} data-tip={tooltip}>
+      <button
+        onClick={() => {
+          click(text);
+        }}
+        data-tip={tooltip}
+      >
         {icon}
         {text}
       </button>
