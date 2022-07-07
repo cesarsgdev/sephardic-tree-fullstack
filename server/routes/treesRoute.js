@@ -49,6 +49,14 @@ router.post("/", async (req, res) => {
 
 // Endpoint to delete a specific tree => DELETE /api/trees/:id
 router.delete("/:id", async (req, res) => {
+  try {
+    const tree = await Tree.findByIdAndDelete(req.params.id);
+    if (tree) {
+      res.status(200).json({ success: true, data: tree });
+    }
+  } catch (e) {
+    res.status(200).json({ success: false, message: `${e.message}` });
+  }
   // res.status(200).json({
   //   message: `This is the endpoint to delete a tree by specific ID. ID ${req.params.id}`,
   // });

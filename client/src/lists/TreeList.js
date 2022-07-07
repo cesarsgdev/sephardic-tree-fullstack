@@ -20,7 +20,7 @@ const TreeList = ({ data }) => {
   const [overlay, setOverlay] = useState(false);
   const [alert, setAlert] = useState(false);
   const [treeName, setTreeName] = useState("");
-  const [inputStates, setInputStates] = useState(data);
+  const [trees, settrees] = useState(data);
   const [oldValue, setOldValue] = useState("");
   const [alertID, setAlertID] = useState("");
 
@@ -37,9 +37,9 @@ const TreeList = ({ data }) => {
 
   const handleInputChange = (e) => {
     const index = e.target.getAttribute("data-index");
-    const temp = [...inputStates];
+    const temp = [...trees];
     temp[index].name = e.target.value;
-    setInputStates(temp);
+    settrees(temp);
   };
 
   const handleNameUpdate = (e) => {
@@ -74,7 +74,31 @@ const TreeList = ({ data }) => {
     }
   };
 
-  const handleDeleteTree = (e) => {};
+  const handleDeleteTree = (e) => {
+    console.log(e.target.id);
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(`api/trees/${e.target.id}`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        toast.success(`Tree "${data.data.name}" deleted`, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+        console.log(data);
+        setOverlay(!overlay);
+        settrees((treeItems) =>
+          trees.filter((tree) => tree._id !== data.data._id)
+        );
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+  };
 
   return (
     <>
@@ -125,7 +149,7 @@ const TreeList = ({ data }) => {
 
       <Container grid>
         <ReactTooltip />
-        {data.map((tree, i) => {
+        {trees.map((tree, i) => {
           const date =
             tree.createdAt === tree.updatedAt ? new Date(tree.createdAt) : null;
           const update =
@@ -142,7 +166,7 @@ const TreeList = ({ data }) => {
                 onChange={handleInputChange}
                 type="text"
                 data-index={i}
-                value={inputStates[i].name}
+                value={trees[i].name}
                 readOnly
                 onKeyDown={(e) => {
                   if (e.keyCode === 13) {
