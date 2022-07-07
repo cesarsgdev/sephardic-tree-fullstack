@@ -4,8 +4,8 @@ export const TreeContainer = styled.table`
   font-family: sans-serif;
   font-size: 9.5pt;
   width: 7in;
-  margin: auto;
-  transform: scale(1.25);
+  transition: 0.5s;
+  transform: ${({ scl }) => `scale(${scl})`};
   user-select: none;
 
   & tr {

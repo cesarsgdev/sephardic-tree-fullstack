@@ -1,34 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container } from "../components/styled/Container.styled";
 import { TreeItem } from "../components/styled/TreeItem.styled";
-import { BsBoxArrowInRight, BsFillEyeFill } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-import { IoTrashBinSharp, IoTrashOutline } from "react-icons/io5";
+import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { Overlay } from "../components/styled/Overlay.styled";
-import { AlertContainer } from "../components/styled/AlertContainer.styled";
 import ReactTooltip from "react-tooltip";
-import { CSSTransition } from "react-transition-group";
-import { Button } from "../components/styled/Button.styled";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { ImLeaf } from "react-icons/im";
 import { toast } from "react-toastify";
-
 import "../styles/animation.css";
 
-const TreeList = ({ data }) => {
-  const [overlay, setOverlay] = useState(false);
-  const [alert, setAlert] = useState(false);
-  const [treeName, setTreeName] = useState("");
-  const [trees, settrees] = useState(data);
+const TreeList = ({ treesData, showAlert }) => {
+  const [trees, setTrees] = useState(treesData);
   const [oldValue, setOldValue] = useState("");
-  const [alertID, setAlertID] = useState("");
-
-  const handleAlert = (e, id) => {
-    setAlertID((aid) => id);
-    setTreeName((name) => e.target.parentElement.getAttribute("treename"));
-    setOverlay(!overlay);
-  };
 
   const handleNameEdition = (e) => {
     e.target.removeAttribute("readOnly");
@@ -39,7 +24,7 @@ const TreeList = ({ data }) => {
     const index = e.target.getAttribute("data-index");
     const temp = [...trees];
     temp[index].name = e.target.value;
-    settrees(temp);
+    setTrees(temp);
   };
 
   const handleNameUpdate = (e) => {
@@ -74,140 +59,77 @@ const TreeList = ({ data }) => {
     }
   };
 
-  const handleDeleteTree = (e) => {
-    console.log(e.target.id);
-    const options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch(`api/trees/${e.target.id}`, options)
-      .then((response) => response.json())
-      .then((data) => {
-        toast.success(`Tree "${data.data.name}" deleted`, {
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-        console.log(data);
-        setOverlay(!overlay);
-        settrees((treeItems) =>
-          trees.filter((tree) => tree._id !== data.data._id)
-        );
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
-  };
-
   return (
     <>
-      <CSSTransition
-        in={overlay}
-        timeout={200}
-        classNames="overlay"
-        mountOnEnter={true}
-        unmountOnExit={true}
-        onEntering={() => {
-          setAlert(true);
-        }}
-        onExited={() => {
-          setTreeName((name) => "");
-        }}
-        onExiting={() => {
-          setAlert(false);
-        }}
-      >
-        <Overlay>
-          <CSSTransition
-            in={alert}
-            timeout={500}
-            classNames="alert"
-            mountOnEnter={true}
-            unmountOnExit={true}
-          >
-            <AlertContainer>
-              <h2>
-                Are you sure you want to delete the family tree "{treeName}"?
-              </h2>
-              <div className="deleteActionButtons">
-                <Button
-                  onClick={() => {
-                    setOverlay(!overlay);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button id={alertID} primary onClick={handleDeleteTree}>
-                  Yes
-                </Button>
-              </div>
-            </AlertContainer>
-          </CSSTransition>
-        </Overlay>
-      </CSSTransition>
-
       <Container grid>
         <ReactTooltip />
-        {trees.map((tree, i) => {
-          const date =
-            tree.createdAt === tree.updatedAt ? new Date(tree.createdAt) : null;
-          const update =
-            tree.createdAt !== tree.updatedAt ? new Date(tree.updatedAt) : null;
-          return (
-            <TreeItem key={i} treename={tree.name}>
-              <div data-tip="Generations" className="numberGenerations">
-                {tree.generations.length} <ImLeaf />
-              </div>
-              <input
-                id={tree._id}
-                onClick={handleNameEdition}
-                onBlur={handleNameUpdate}
-                onChange={handleInputChange}
-                type="text"
-                data-index={i}
-                value={trees[i].name}
-                readOnly
-                onKeyDown={(e) => {
-                  if (e.keyCode === 13) {
-                    e.target.blur();
-                  }
-                }}
-              />
-              {/* <h2>{tree.name}</h2> */}
-              {date && (
-                <span>
-                  Created:{" "}
-                  {`${date.getDate()}/${
-                    date.getMonth() + 1
-                  }/${date.getFullYear()}`}
-                </span>
-              )}
+        <TransitionGroup component={null}>
+          {treesData.map((tree, i) => {
+            const date =
+              tree.createdAt === tree.updatedAt
+                ? new Date(tree.createdAt)
+                : null;
+            const update =
+              tree.createdAt !== tree.updatedAt
+                ? new Date(tree.updatedAt)
+                : null;
+            return (
+              <CSSTransition key={tree._id} timeout={500} classNames="treeItem">
+                <TreeItem key={i} treename={tree.name}>
+                  <div data-tip="Generations" className="numberGenerations">
+                    {tree.generations.length} <ImLeaf />
+                  </div>
+                  <input
+                    id={tree._id}
+                    onClick={handleNameEdition}
+                    onBlur={handleNameUpdate}
+                    onChange={handleInputChange}
+                    type="text"
+                    data-index={i}
+                    value={treesData[i].name}
+                    readOnly
+                    onKeyDown={(e) => {
+                      if (e.keyCode === 13) {
+                        e.target.blur();
+                      }
+                    }}
+                  />
+                  {/* <h2>{tree.name}</h2> */}
+                  {date && (
+                    <span>
+                      Created:{" "}
+                      {`${date.getDate()}/${
+                        date.getMonth() + 1
+                      }/${date.getFullYear()}`}
+                    </span>
+                  )}
 
-              {update && (
-                <span>
-                  Updated:{" "}
-                  {`${update.getDate()}/${
-                    update.getMonth() + 1
-                  }/${update.getFullYear()}`}
-                </span>
-              )}
-              <div className="treeControls" treename={tree.name}>
-                <AiOutlineEye data-tip="View Tree" />
-                <IoTrashOutline
-                  className="delete"
-                  data-tip="Delete Tree"
-                  onClick={(e) => {
-                    handleAlert(e, tree._id);
-                  }}
-                />
-                <Link to={`builder/${tree._id}`}>
-                  <BiEdit data-tip="Edit Tree" />
-                </Link>
-              </div>
-            </TreeItem>
-          );
-        })}
+                  {update && (
+                    <span>
+                      Updated:{" "}
+                      {`${update.getDate()}/${
+                        update.getMonth() + 1
+                      }/${update.getFullYear()}`}
+                    </span>
+                  )}
+                  <div className="treeControls" treename={tree.name}>
+                    <AiOutlineEye data-tip="View Tree" />
+                    <IoTrashOutline
+                      className="delete"
+                      data-tip="Delete Tree"
+                      onClick={(e) => {
+                        showAlert(e, tree._id);
+                      }}
+                    />
+                    <Link to={`builder/${tree._id}`}>
+                      <BiEdit data-tip="Edit Tree" />
+                    </Link>
+                  </div>
+                </TreeItem>
+              </CSSTransition>
+            );
+          })}
+        </TransitionGroup>
       </Container>
     </>
   );

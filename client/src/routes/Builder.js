@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import { Container } from "../components/styled/Container.styled";
@@ -9,59 +9,57 @@ import {
   TableBody,
 } from "../components/styled/TreeContainer.styled";
 import Generations from "../lists/Generations";
-import PersonForm from "../components/forms/PersonForm";
+import Forms from "../components/forms/Forms";
 import transparentBG from "../transparent-bg.jpeg";
 import { toast } from "react-toastify";
 import { CSSTransition } from "react-transition-group";
+import useForms from "../components/forms/useForms";
 import "../styles/animation.css";
 
 const Builder = () => {
   const { id } = useParams();
   const [treeData, setTreeData] = useState(false);
-  const [forms, setForms] = useState(false);
   const table = useRef();
-  const formActive = useRef();
-  const [typeOfForm, setTypeOfForm] = useState("");
+  const canvas = useRef();
+  const { formActive, forms, typeOfForm, handleForm, hide } = useForms();
+  const [zoom, setZoom] = useState(1.25);
+  const zoomAmount = useRef(1.25);
+
+  const zoomIn = useCallback((e) => {
+    e.preventDefault();
+    if (e.deltaY <= 0 && zoomAmount.current < 3) {
+      zoomAmount.current += 0.05;
+    }
+    if (e.deltaY > 0 && zoomAmount.current > 0.05) {
+      zoomAmount.current -= 0.05;
+    }
+
+    setZoom((zoomCurrent) => zoomAmount.current);
+  });
 
   useEffect(() => {
-    fetch(`../api/trees/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          console.log(data);
-          setTreeData((treeData) => data.data);
-        }
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
-  }, []);
-
-  const handlePrincipal = (e) => {
-    if (formActive.current) {
-      setForms(false);
-      setTimeout(() => {
-        setTypeOfForm("Principal");
-        setForms(true);
-      }, 210);
-    } else {
-      setTypeOfForm("Principal");
-      setForms(true);
+    if (!treeData) {
+      fetch(`../api/trees/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            // console.log(data);
+            setTreeData((treeData) => data.data);
+          }
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
     }
-  };
-
-  const handlePartner = (e) => {
-    if (formActive.current) {
-      setForms(false);
-      setTimeout(() => {
-        setTypeOfForm("Partner");
-        setForms(true);
-      }, 210);
-    } else {
-      setTypeOfForm("Partner");
-      setForms(true);
+    if (canvas.current) {
+      canvas.current.addEventListener("wheel", zoomIn);
     }
-  };
+  }, [treeData]);
+
+  // useEffect(() => {
+  //   console.log("Effect ran!");
+  //   console.log(table.current);
+  // }, [table.current]);
 
   const handleCopy = (e) => {
     console.log("started copy");
@@ -103,26 +101,31 @@ const Builder = () => {
         mountOnEnter={true}
         unmountOnExit={true}
       >
-        <PersonForm ref={formActive} type={typeOfForm} />
+        <Forms ref={formActive} type={typeOfForm} />
       </CSSTransition>
       {!treeData && <Loader whatsLoading={"builder"} />}
       {treeData && (
         <Container pd="0" flex flow="row nowrap" gap="0px">
           <TreeCanvas
+            ref={canvas}
             cbi={transparentBG}
             onClick={() => {
-              setForms(false);
+              hide();
             }}
+            // onWheel={(e) => {
+            //   console.log(`movement!`);
+            // }}
           >
-            <TreeContainer ref={table}>
+            <TreeContainer ref={table} scl={zoom}>
               <TableBody>
                 <Generations data={treeData} />
               </TableBody>
             </TreeContainer>
           </TreeCanvas>
           <TreeControls
-            showPrincipal={handlePrincipal}
-            showPartner={handlePartner}
+            showPrincipal={handleForm}
+            showPartner={handleForm}
+            showMarriage={handleForm}
             copyFunction={handleCopy}
           ></TreeControls>
         </Container>

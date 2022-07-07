@@ -47,3 +47,18 @@
   transform: translateX(-600px);
   transition: 200ms ease-in;
 }
+
+.treeItem-enter {
+  opacity: 0;
+}
+.treeItem-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.treeItem-exit {
+  opacity: 1;
+}
+.treeItem-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}

@@ -4,7 +4,12 @@ import { ImUser, ImUsers } from "react-icons/im";
 import { GiLinkedRings } from "react-icons/gi";
 import { FaCopy } from "react-icons/fa";
 
-const TreeControls = ({ copyFunction, showPrincipal, showPartner }) => {
+const TreeControls = ({
+  copyFunction,
+  showPrincipal,
+  showMarriage,
+  showPartner,
+}) => {
   return (
     <>
       <TreeControlsContainer>
@@ -15,6 +20,7 @@ const TreeControls = ({ copyFunction, showPrincipal, showPartner }) => {
           tooltip="Add Principal"
         />
         <ControlItem
+          click={showMarriage}
           icon={<GiLinkedRings />}
           text="Marriage"
           tooltip="Add Marriage"

@@ -9,7 +9,9 @@ import NoTrees from "../components/NoTrees";
 import TreeList from "../lists/TreeList";
 import ReactTooltip from "react-tooltip";
 import { toast } from "react-toastify";
-
+import { Overlay } from "../components/styled/Overlay.styled";
+import { AlertContainer } from "../components/styled/AlertContainer.styled";
+import { CSSTransition } from "react-transition-group";
 import {
   MdAddBox,
   MdOutlineAccountCircle,
@@ -17,7 +19,11 @@ import {
 } from "react-icons/md";
 
 const Home = () => {
-  const [treeData, setTreeData] = useState(false);
+  const [treesData, settreesData] = useState(false);
+  const [overlay, setOverlay] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [treeName, setTreeName] = useState("");
+  const [alertID, setAlertID] = useState("");
 
   useEffect(() => {
     const options = {
@@ -31,7 +37,7 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setTreeData(data.data);
+        settreesData(data.data);
       })
       .catch((e) => {
         console.log(e.message);
@@ -60,7 +66,39 @@ const Home = () => {
         toast.success(`Added tree ${data.data.name}`, {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
-        setTreeData([...treeData, data.data]);
+        settreesData([...treesData, data.data]);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+  };
+
+  const handleAlert = (e, id) => {
+    setAlertID((aid) => id);
+    setTreeName((name) => e.target.parentElement.getAttribute("treename"));
+    setOverlay(!overlay);
+  };
+
+  const handleDeleteTree = (e) => {
+    console.log(e.target.id);
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(`api/trees/${e.target.id}`, options)
+      .then((response) => response.json())
+      .then((data) => {
+        toast.success(`Tree "${data.data.name}" deleted`, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+        console.log(data);
+        setOverlay(!overlay);
+        settreesData((treeItems) =>
+          treesData.filter((tree) => tree._id !== data.data._id)
+        );
       })
       .catch((e) => {
         console.log(e.message);
@@ -70,7 +108,51 @@ const Home = () => {
   const navigate = useNavigate();
   return (
     <>
-      {!treeData && <Loader whatsLoading="trees"></Loader>}
+      <CSSTransition
+        in={overlay}
+        timeout={200}
+        classNames="overlay"
+        mountOnEnter={true}
+        unmountOnExit={true}
+        onEntering={() => {
+          setAlert(true);
+        }}
+        onExited={() => {
+          setTreeName((name) => "");
+        }}
+        onExiting={() => {
+          setAlert(false);
+        }}
+      >
+        <Overlay>
+          <CSSTransition
+            in={alert}
+            timeout={500}
+            classNames="alert"
+            mountOnEnter={true}
+            unmountOnExit={true}
+          >
+            <AlertContainer>
+              <h2>
+                Are you sure you want to delete the family tree "{treeName}"?
+              </h2>
+              <div className="deleteActionButtons">
+                <Button
+                  onClick={() => {
+                    setOverlay(!overlay);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button id={alertID} primary onClick={handleDeleteTree}>
+                  Yes
+                </Button>
+              </div>
+            </AlertContainer>
+          </CSSTransition>
+        </Overlay>
+      </CSSTransition>
+      {!treesData && <Loader whatsLoading="trees"></Loader>}
       <Header>
         <ReactTooltip />
         <Container
@@ -83,7 +165,7 @@ const Home = () => {
         >
           <img src={logo} alt="Sephardic Tree Logo" />
           <div className="buttonsHeader">
-            {treeData.length > 0 && (
+            {treesData.length > 0 && (
               <MdAddBox
                 onClick={handleNewTree}
                 className="newTree"
@@ -122,8 +204,14 @@ const Home = () => {
           </div>
         </Container>
       </Header>
-      {!treeData.length && <NoTrees />}
-      {treeData && <TreeList data={treeData} />}
+      {!treesData.length && <NoTrees />}
+      {treesData && (
+        <TreeList
+          treesData={treesData}
+          deleteTree={handleDeleteTree}
+          showAlert={handleAlert}
+        />
+      )}
     </>
   );
 };

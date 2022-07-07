@@ -30,7 +30,7 @@ const PersonForm = forwardRef(({ type, level }, ref) => {
 
   return (
     <>
-      <TreeForm ref={ref} onSubmit={handleSubmit}>
+      <TreeForm id={type} ref={ref} onSubmit={handleSubmit}>
         <h1>
           {type === "Principal" ? <ImUser /> : <ImUsers />}
           Add {type}
