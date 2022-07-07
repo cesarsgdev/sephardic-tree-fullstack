@@ -6,6 +6,7 @@ export const TreeContainer = styled.table`
   width: 7in;
   margin: auto;
   transform: scale(1.25);
+  user-select: none;
 
   & tr {
     background: #fff;

@@ -24,6 +24,7 @@ export const TreeControlsContainer = styled.section`
     border: 2px solid transparent;
     border-radius: 5px;
     transition: 0.5s;
+    user-select: none;
     cursor: pointer;
   }
 

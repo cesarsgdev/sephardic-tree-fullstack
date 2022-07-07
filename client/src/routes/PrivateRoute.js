@@ -11,6 +11,7 @@ const PrivateRoute = ({ children }) => {
     // console.log(decoded);
     // console.log(Date.now());
     // console.log(Date.now() < decoded.exp * 1000);
+
     if (Date.now() >= decoded.exp * 1000) {
       localStorage.removeItem("token");
       // navigate("/login", { replace: true });

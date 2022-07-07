@@ -32,3 +32,18 @@
   transform: scale(0.1);
   transition: 500ms ease-in;
 }
+
+.forms-enter {
+  transform: translateX(-600px);
+}
+.forms-enter-active {
+  transform: translateX(0px);
+  transition: 200ms ease-in;
+}
+.forms-exit {
+  transform: translateX(0px);
+}
+.forms-exit-active {
+  transform: translateX(-600px);
+  transition: 200ms ease-in;
+}

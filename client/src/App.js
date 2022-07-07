@@ -6,9 +6,24 @@ import Builder from "./routes/Builder";
 import NotFound from "./routes/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const decoded = jwt_decode(token);
+
+      if (decoded.roles.includes("admin")) {
+        setIsAdmin(true);
+      }
+    }
+  }, []);
+
   // const [logedIn, setLogedIn] = useState(false);
   // // const token = localStorage.getItem("token");
   // const [token, setToken] = useState(localStorage.getItem("token"));
@@ -34,6 +49,10 @@ function App() {
             }
           ></Route>
           <Route path="builder/:id" element={<Builder />}></Route>
+
+          {isAdmin && (
+            <Route path="admin" element={<h1>This is admin</h1>}></Route>
+          )}
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </BrowserRouter>

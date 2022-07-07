@@ -4,11 +4,12 @@ import { ImUser, ImUsers } from "react-icons/im";
 import { GiLinkedRings } from "react-icons/gi";
 import { FaCopy } from "react-icons/fa";
 
-const TreeControls = ({ copyFunction }) => {
+const TreeControls = ({ copyFunction, showPrincipal, showPartner }) => {
   return (
     <>
       <TreeControlsContainer>
         <ControlItem
+          click={showPrincipal}
           icon={<ImUser />}
           text="Principal"
           tooltip="Add Principal"
@@ -18,7 +19,12 @@ const TreeControls = ({ copyFunction }) => {
           text="Marriage"
           tooltip="Add Marriage"
         />
-        <ControlItem icon={<ImUsers />} text="Partner" tooltip="Add Partner" />
+        <ControlItem
+          click={showPartner}
+          icon={<ImUsers />}
+          text="Partner"
+          tooltip="Add Partner"
+        />
         <ControlItem
           click={copyFunction}
           icon={<FaCopy />}

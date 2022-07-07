@@ -12,6 +12,7 @@ const Generations = ({ data }) => {
         const partner = generation.partner;
         return (
           <TableRow
+            draggable
             key={generation._id}
             id={generation._id}
             onClick={(e) => {
@@ -23,7 +24,7 @@ const Generations = ({ data }) => {
             <TableData className="generationInfo">
               <strong>{`*${principal.name.toUpperCase()} `}</strong>
               {`(${principal.events.code} ${principal.events.data.date.day}/${principal.events.data.date.month}/${principal.events.data.date.year}, ${principal.events.data.place}, m. ${principal.events.death.date.day}/${principal.events.death.date.month}/${principal.events.death.date.year}, ${principal.events.death.place})`}
-              <strong>{`${marriage.date.day ? `- casou ` : ""}`}</strong>
+              <strong>{`${marriage.date.day ? ` - casou ` : ""}`}</strong>
               {`(${marriage.date.day}/${marriage.date.month}/${marriage.date.yearh}, ${marriage.place})`}
               <strong>
                 {" "}
