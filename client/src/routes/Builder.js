@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import { Container } from "../components/styled/Container.styled";
@@ -11,31 +11,18 @@ import {
 import Generations from "../lists/Generations";
 import Forms from "../components/forms/Forms";
 import transparentBG from "../transparent-bg.jpeg";
-import { toast } from "react-toastify";
 import { CSSTransition } from "react-transition-group";
 import useForms from "../components/forms/useForms";
+import useCopy from "../hooks/useCopy";
+import useZoom from "../hooks/useZoom";
 import "../styles/animation.css";
 
 const Builder = () => {
   const { id } = useParams();
   const [treeData, setTreeData] = useState(false);
-  const table = useRef();
-  const canvas = useRef();
+  const [table, copyTable] = useCopy();
   const { formActive, forms, typeOfForm, handleForm, hide } = useForms();
-  const [zoom, setZoom] = useState(1.25);
-  const zoomAmount = useRef(1.25);
-
-  const zoomIn = useCallback((e) => {
-    e.preventDefault();
-    if (e.deltaY <= 0 && zoomAmount.current < 3) {
-      zoomAmount.current += 0.05;
-    }
-    if (e.deltaY > 0 && zoomAmount.current > 0.05) {
-      zoomAmount.current -= 0.05;
-    }
-
-    setZoom((zoomCurrent) => zoomAmount.current);
-  });
+  const [canvas, zoom, zoomIn] = useZoom();
 
   useEffect(() => {
     if (!treeData) {
@@ -56,42 +43,6 @@ const Builder = () => {
     }
   }, [treeData]);
 
-  // useEffect(() => {
-  //   console.log("Effect ran!");
-  //   console.log(table.current);
-  // }, [table.current]);
-
-  const handleCopy = (e) => {
-    console.log("started copy");
-    const elTable = table.current;
-
-    let range, sel;
-
-    // Ensure that range and selection are supported by the browsers
-    if (document.createRange && window.getSelection) {
-      range = document.createRange();
-      sel = window.getSelection();
-      // unselect any element in the page
-      sel.removeAllRanges();
-
-      try {
-        range.selectNodeContents(elTable);
-        sel.addRange(range);
-      } catch (e) {
-        range.selectNode(elTable);
-        sel.addRange(range);
-      }
-
-      document.execCommand("copy");
-    }
-
-    sel.removeAllRanges();
-
-    toast.success(`Tree Copied`, {
-      position: toast.POSITION.BOTTOM_CENTER,
-    });
-    // console.log("Element Copied! Paste it in a file");
-  };
   return (
     <>
       <CSSTransition
@@ -112,9 +63,6 @@ const Builder = () => {
             onClick={() => {
               hide();
             }}
-            // onWheel={(e) => {
-            //   console.log(`movement!`);
-            // }}
           >
             <TreeContainer ref={table} scl={zoom}>
               <TableBody>
@@ -126,7 +74,7 @@ const Builder = () => {
             showPrincipal={handleForm}
             showPartner={handleForm}
             showMarriage={handleForm}
-            copyFunction={handleCopy}
+            copyFunction={copyTable}
           ></TreeControls>
         </Container>
       )}
