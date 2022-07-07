@@ -201,7 +201,7 @@ const TreeList = ({ data }) => {
                     handleAlert(e, tree._id);
                   }}
                 />
-                <Link to={`tree/${tree._id}`}>
+                <Link to={`builder/${tree._id}`}>
                   <BiEdit data-tip="Edit Tree" />
                 </Link>
               </div>

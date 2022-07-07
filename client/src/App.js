@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./routes/PrivateRoute";
 import Login from "./routes/Login";
 import Home from "./routes/Home";
+import Builder from "./routes/Builder";
 import NotFound from "./routes/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,7 +33,7 @@ function App() {
               </PrivateRoute>
             }
           ></Route>
-          <Route path="tree/:id" element={<h1>Tree editor</h1>}></Route>
+          <Route path="builder/:id" element={<Builder />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </BrowserRouter>

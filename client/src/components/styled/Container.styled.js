@@ -12,11 +12,10 @@ export const Container = styled.div`
   ${({ flow }) => (flow ? "flex-flow:" + flow + ";" : "")}
   ${({ justify }) => (justify ? "justify-content:" + justify + ";" : "")}
   ${({ align }) => (align ? "align-items:" + align + ";" : "")}
-  ${({ gap }) => (gap ? "gap:" + gap + ";" : "")}
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-auto-rows: min-content;
+  gap: ${({ gap }) => (gap ? "gap:" + gap + "" : "20px")};
 
-  gap: 20px;
   ${({ pd }) => (pd ? "padding:" + pd + ";" : "padding:20px;")}
 
   & h1.noTrees {
