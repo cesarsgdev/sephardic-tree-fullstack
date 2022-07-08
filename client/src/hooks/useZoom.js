@@ -1,9 +1,15 @@
-import { useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
-const useZoom = () => {
+const useZoom = (dependency) => {
   const canvas = useRef();
   const [zoom, setZoom] = useState(1.25);
   const zoomAmount = useRef(1.25);
+
+  useEffect(() => {
+    if (canvas.current) {
+      canvas.current.addEventListener("wheel", zoomIn);
+    }
+  }, [dependency]);
 
   const zoomIn = useCallback((e) => {
     e.preventDefault();

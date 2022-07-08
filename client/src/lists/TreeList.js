@@ -1,70 +1,30 @@
-import { useState, useEffect } from "react";
+import useTreeActions from "../hooks/useTreeActions";
 import { Container } from "../components/styled/Container.styled";
 import { TreeItem } from "../components/styled/TreeItem.styled";
 import { BiEdit } from "react-icons/bi";
 import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import ReactTooltip from "react-tooltip";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { ImLeaf } from "react-icons/im";
-import { toast } from "react-toastify";
+import ReactTooltip from "react-tooltip";
 import "../styles/animation.css";
 
 const TreeList = ({ treesData, showAlert }) => {
-  const [trees, setTrees] = useState(treesData);
-  const [oldValue, setOldValue] = useState("");
-
-  const handleNameEdition = (e) => {
-    e.target.removeAttribute("readOnly");
-    setOldValue((value) => e.target.value);
-  };
-
-  const handleInputChange = (e) => {
-    const index = e.target.getAttribute("data-index");
-    const temp = [...trees];
-    temp[index].name = e.target.value;
-    setTrees(temp);
-  };
-
-  const handleNameUpdate = (e) => {
-    if (oldValue !== e.target.value) {
-      e.target.setAttribute("readOnly", null);
-
-      const payload = {
-        name: e.target.value,
-      };
-
-      const options = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      };
-
-      fetch(`api/trees/${e.target.id}`, options)
-        .then((response) => response.json())
-        .then((data) => {
-          toast.success(`Name change completed`, {
-            position: toast.POSITION.BOTTOM_RIGHT,
-          });
-          console.log(data);
-        })
-        .catch((e) => {
-          console.log(e.message);
-        });
-    } else {
-      return;
-    }
-  };
+  const {
+    trees,
+    oldValue,
+    handleNameEdition,
+    handleInputChange,
+    handleNameUpdate,
+  } = useTreeActions(treesData);
 
   return (
     <>
       <Container grid>
         <ReactTooltip />
         <TransitionGroup component={null}>
-          {treesData.map((tree, i) => {
+          {trees.map((tree, i) => {
             const date =
               tree.createdAt === tree.updatedAt
                 ? new Date(tree.createdAt)
@@ -82,6 +42,7 @@ const TreeList = ({ treesData, showAlert }) => {
                   <input
                     id={tree._id}
                     onClick={handleNameEdition}
+                    onFocus={handleNameEdition}
                     onBlur={handleNameUpdate}
                     onChange={handleInputChange}
                     type="text"
@@ -94,7 +55,6 @@ const TreeList = ({ treesData, showAlert }) => {
                       }
                     }}
                   />
-                  {/* <h2>{tree.name}</h2> */}
                   {date && (
                     <span>
                       Created:{" "}

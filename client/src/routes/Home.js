@@ -1,113 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Loader from "../components/Loader";
+import useAPI from "../hooks/useAPI";
+import useTreeActions from "../hooks/useTreeActions";
 import { Header } from "../components/styled/Header.styled";
 import { Container } from "../components/styled/Container.styled";
 import { Button } from "../components/styled/Button.styled";
-import logo from "../logo.svg";
-import NoTrees from "../components/NoTrees";
-import TreeList from "../lists/TreeList";
-import ReactTooltip from "react-tooltip";
-import { toast } from "react-toastify";
 import { Overlay } from "../components/styled/Overlay.styled";
 import { AlertContainer } from "../components/styled/AlertContainer.styled";
+import Loader from "../components/Loader";
+import NoTrees from "../components/NoTrees";
+import TreeList from "../lists/TreeList";
 import { CSSTransition } from "react-transition-group";
+import ReactTooltip from "react-tooltip";
 import {
   MdAddBox,
   MdOutlineAccountCircle,
   MdPowerSettingsNew,
 } from "react-icons/md";
+import logo from "../logo.svg";
 
 const Home = () => {
-  const [treesData, settreesData] = useState(false);
-  const [overlay, setOverlay] = useState(false);
+  const {
+    treesData,
+    handleAlert,
+    treeName,
+    alertID,
+    handleNewTree,
+    handleDeleteTree,
+    overlay,
+    setTreeName,
+    setOverlay,
+    homeLoaded,
+  } = useTreeActions();
   const [alert, setAlert] = useState(false);
-  const [treeName, setTreeName] = useState("");
-  const [alertID, setAlertID] = useState("");
-
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": localStorage.getItem("token"),
-      },
-    };
-    fetch("api/trees", options)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        settreesData(data.data);
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
-  }, []);
-
-  const handleNewTree = () => {
-    const payLoad = {
-      generations: [],
-      uid: "62c49e0f57684a9e72992c2d",
-    };
-
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": localStorage.getItem("token"),
-      },
-      body: JSON.stringify(payLoad),
-    };
-
-    fetch("api/trees", options)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        toast.success(`Added tree ${data.data.name}`, {
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-        settreesData([...treesData, data.data]);
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
-  };
-
-  const handleAlert = (e, id) => {
-    setAlertID((aid) => id);
-    setTreeName((name) => e.target.parentElement.getAttribute("treename"));
-    setOverlay(!overlay);
-  };
-
-  const handleDeleteTree = (e) => {
-    console.log(e.target.id);
-    const options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch(`api/trees/${e.target.id}`, options)
-      .then((response) => response.json())
-      .then((data) => {
-        toast.success(`Tree "${data.data.name}" deleted`, {
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-        console.log(data);
-        setOverlay(!overlay);
-        settreesData((treeItems) =>
-          treesData.filter((tree) => tree._id !== data.data._id)
-        );
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
-  };
-
+  const [API] = useAPI();
   const navigate = useNavigate();
+
   return (
     <>
+      {(homeLoaded.current = true)}
       <CSSTransition
         in={overlay}
         timeout={200}
@@ -171,27 +102,10 @@ const Home = () => {
                 className="newTree"
                 data-tip="Add new Tree"
               />
-              // <Button onClick={handleNewTree} primary>
-              //   New Tree
-              // </Button>
             )}
-            {/* <Button
-              onClick={() => {
-                localStorage.removeItem("token");
-                navigate("/login", { replace: true });
-              }}
-            >
-              Logout
-            </Button> */}
-
             <MdOutlineAccountCircle
               className="myAccount"
               data-tip="My Account"
-              onClick={() => {
-                toast.success("Clicked account!", {
-                  position: toast.POSITION.BOTTOM_RIGHT,
-                });
-              }}
             />
             <MdPowerSettingsNew
               className="logout"
