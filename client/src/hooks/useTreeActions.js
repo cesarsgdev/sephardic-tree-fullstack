@@ -14,8 +14,8 @@ const useTreeActions = (treesState) => {
   const [treeData, setTreeData] = useState(false);
   const [oldValue, setOldValue] = useState("");
 
-  // State for tree list component
-  const [trees, setTrees] = useState(treesState);
+  // State to change input values
+  const [inputState, setInputState] = useState(treesState);
 
   useEffect(() => {
     if (homeLoaded.current) {
@@ -59,15 +59,16 @@ const useTreeActions = (treesState) => {
   };
 
   const handleNameEdition = (e) => {
+    console.log(e.target.value);
     e.target.removeAttribute("readOnly");
     setOldValue((value) => e.target.value);
   };
 
   const handleInputChange = (e) => {
     const index = e.target.getAttribute("data-index");
-    const temp = [...trees];
+    const temp = [...treesState];
     temp[index].name = e.target.value;
-    setTrees(temp);
+    setInputState(temp);
   };
 
   const handleNameUpdate = async (e) => {
@@ -92,7 +93,6 @@ const useTreeActions = (treesState) => {
     homeLoaded,
     oldValue,
     handleNameEdition,
-    trees,
     handleInputChange,
     handleNameUpdate,
   };

@@ -37,15 +37,21 @@ const useAPI = () => {
     }
 
     async newTree(uid) {
-      const tree = await fetch(
-        `${this.baseURL}/trees/`,
-        this.options("POST", { generations: [], uid: uid })
-      );
-      const data = await tree.json();
-      toast.success(`Added tree ${data.data.name}`, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-      });
-      return data.data;
+      try {
+        const tree = await fetch(
+          `${this.baseURL}/trees/`,
+          this.options("POST", { generations: [], uid: uid })
+        );
+        const data = await tree.json();
+        toast.success(`Added tree ${data.data.name}`, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+        return data.data;
+      } catch (e) {
+        toast.error(`Something went wrong! Please try again`, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+      }
     }
 
     async deleteTree(treeID) {

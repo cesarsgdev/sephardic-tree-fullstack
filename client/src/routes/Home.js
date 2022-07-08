@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAPI from "../hooks/useAPI";
 import useTreeActions from "../hooks/useTreeActions";
 import { Header } from "../components/styled/Header.styled";
 import { Container } from "../components/styled/Container.styled";
@@ -33,7 +32,6 @@ const Home = () => {
     homeLoaded,
   } = useTreeActions();
   const [alert, setAlert] = useState(false);
-  const [API] = useAPI();
   const navigate = useNavigate();
 
   return (

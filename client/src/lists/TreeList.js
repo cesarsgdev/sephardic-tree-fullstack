@@ -1,30 +1,25 @@
-import useTreeActions from "../hooks/useTreeActions";
 import { Container } from "../components/styled/Container.styled";
 import { TreeItem } from "../components/styled/TreeItem.styled";
 import { BiEdit } from "react-icons/bi";
 import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { ImLeaf } from "react-icons/im";
-import ReactTooltip from "react-tooltip";
 import "../styles/animation.css";
+import useTreeActions from "../hooks/useTreeActions";
 
 const TreeList = ({ treesData, showAlert }) => {
-  const {
-    trees,
-    oldValue,
-    handleNameEdition,
-    handleInputChange,
-    handleNameUpdate,
-  } = useTreeActions(treesData);
+  const { handleNameEdition, handleInputChange, handleNameUpdate } =
+    useTreeActions(treesData);
 
   return (
     <>
       <Container grid>
         <ReactTooltip />
         <TransitionGroup component={null}>
-          {trees.map((tree, i) => {
+          {treesData.map((tree, i) => {
             const date =
               tree.createdAt === tree.updatedAt
                 ? new Date(tree.createdAt)
@@ -55,6 +50,7 @@ const TreeList = ({ treesData, showAlert }) => {
                       }
                     }}
                   />
+                  {/* <h2>{tree.name}</h2> */}
                   {date && (
                     <span>
                       Created:{" "}
