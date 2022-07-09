@@ -14,6 +14,7 @@ export const TreeContainer = styled.table`
   }
 
   & td {
+    position: relative;
     border: 1px solid #000;
   }
 
@@ -27,6 +28,9 @@ export const TreeContainer = styled.table`
   & td.generationInfo {
     width: 5.35in;
     padding: 5px;
+  }
+
+  & td span {
   }
 `;
 

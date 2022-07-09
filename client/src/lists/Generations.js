@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { TableRow, TableData } from "../components/styled/TreeContainer.styled";
+import { CSSTransition } from "react-transition-group";
+import GenerationControls from "../components/GenerationControls";
+import "../styles/animation.css";
 
 const Generations = ({ data }) => {
-  const [gens, setGens] = useState(data);
-  const [submenu, setSubmenu] = useState(false);
+  const [treeData, setTreeData] = useState(data);
+  const [gens, setGens] = useState(data.generations);
+  const [submenu, setSubmenu] = useState([false, null]);
   return (
     <>
-      {gens.generations.map((generation, i) => {
+      {gens.map((generation, i) => {
         const principal = generation.principal;
         const marriage = generation.marriage;
         const partner = generation.partner;
@@ -15,13 +19,41 @@ const Generations = ({ data }) => {
             draggable
             key={generation._id}
             id={generation._id}
+            data-index={i}
             onClick={(e) => {
               console.log(`Clicked ${generation._id}`);
               setSubmenu(true);
             }}
           >
-            <TableData className="generation">{generation.level}</TableData>
-            <TableData className="generationInfo">
+            <TableData data-index={i} className="generation">
+              {generation.level}
+            </TableData>
+            <TableData
+              data-index={i}
+              className="generationInfo"
+              onMouseOver={(e) => {
+                setSubmenu([true, i]);
+              }}
+              onMouseOut={(e) => {
+                setSubmenu([false, i]);
+              }}
+            >
+              {
+                <CSSTransition
+                  in={submenu[0]}
+                  timeout={500}
+                  classNames="submenu-generation"
+                  mountOnEnter={true}
+                  unmountOnExit={true}
+                  appear={true}
+                >
+                  {(state) =>
+                    submenu[1] === i ? (
+                      <GenerationControls></GenerationControls>
+                    ) : null
+                  }
+                </CSSTransition>
+              }
               <strong>{`*${principal.name.toUpperCase()} `}</strong>
               {`(${principal.events.code} ${principal.events.data.date.day}/${principal.events.data.date.month}/${principal.events.data.date.year}, ${principal.events.data.place}, m. ${principal.events.death.date.day}/${principal.events.death.date.month}/${principal.events.death.date.year}, ${principal.events.death.place})`}
               <strong>{`${marriage.date.day ? ` - casou ` : ""}`}</strong>

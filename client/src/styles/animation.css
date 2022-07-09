@@ -62,3 +62,18 @@
   opacity: 0;
   transition: opacity 500ms ease-in;
 }
+
+.submenu-generation-enter {
+  opacity: 0;
+}
+.submenu-generation-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.submenu-generation-exit {
+  opacity: 1;
+}
+.submenu-generation-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
