@@ -3,7 +3,7 @@ import DatePicker from "react-date-picker";
 import { useState, forwardRef } from "react";
 import { ImUser, ImUsers } from "react-icons/im";
 
-const PersonForm = forwardRef(({ type, level }, ref) => {
+const PersonForm = forwardRef(({ type, level, isEditing }, ref) => {
   const [dateEvent, setDateEvent] = useState("");
   const [dateDeath, setDateDeath] = useState("");
   const [formValues, setFormValues] = useState({
@@ -31,6 +31,7 @@ const PersonForm = forwardRef(({ type, level }, ref) => {
   return (
     <>
       <TreeForm id={type} ref={ref} onSubmit={handleSubmit}>
+        {isEditing && <div>You're editing {type}</div>}
         <h1>
           {type === "Principal" ? <ImUser /> : <ImUsers />}
           Add {type}
@@ -99,7 +100,10 @@ const PersonForm = forwardRef(({ type, level }, ref) => {
             value={dateDeath}
           />
         </label>
-        <input type="submit" value={`Add ${type}`} />
+        <input
+          type="submit"
+          value={`${isEditing ? "Update" : "Add"} ${type}`}
+        />
       </TreeForm>
     </>
   );

@@ -20,7 +20,8 @@ const Builder = () => {
   const [table, copyTable] = useCopy();
   const { treeData, builderLoaded } = useTreeActions();
   const [canvas, zoom, zoomIn] = useZoom(treeData);
-  const { formActive, forms, typeOfForm, handleForm, hide } = useForms();
+  const { formActive, forms, typeOfForm, handleForm, isEditing, hide } =
+    useForms();
 
   return (
     <>
@@ -33,7 +34,7 @@ const Builder = () => {
         mountOnEnter={true}
         unmountOnExit={true}
       >
-        <Forms ref={formActive} type={typeOfForm} />
+        <Forms ref={formActive} type={typeOfForm} isEditing={isEditing} />
       </CSSTransition>
       {!treeData && <Loader whatsLoading={"builder"} />}
       {treeData && (
@@ -47,7 +48,7 @@ const Builder = () => {
           >
             <TreeContainer ref={table} scl={zoom}>
               <TableBody>
-                <Generations data={treeData} />
+                <Generations data={treeData} showForms={handleForm} />
               </TableBody>
             </TreeContainer>
           </TreeCanvas>

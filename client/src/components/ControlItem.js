@@ -1,12 +1,13 @@
 import ReactTooltip from "react-tooltip";
 
-const ControlItem = ({ icon, text, tooltip, click }) => {
+const ControlItem = ({ icon, text, tooltip, click, isEditing = false }) => {
   return (
     <>
       <ReactTooltip wrapper="span" />
       <button
-        onClick={() => {
-          click(text);
+        onClick={(e) => {
+          e.stopPropagation();
+          click(text, isEditing);
         }}
         data-tip={tooltip}
         data-place="top"

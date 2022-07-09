@@ -4,7 +4,7 @@ import { CSSTransition } from "react-transition-group";
 import GenerationControls from "../components/GenerationControls";
 import "../styles/animation.css";
 
-const Generations = ({ data }) => {
+const Generations = ({ data, showForms }) => {
   const [treeData, setTreeData] = useState(data);
   const [gens, setGens] = useState(data.generations);
   const [submenu, setSubmenu] = useState([false, null]);
@@ -20,10 +20,6 @@ const Generations = ({ data }) => {
             key={generation._id}
             id={generation._id}
             data-index={i}
-            onClick={(e) => {
-              console.log(`Clicked ${generation._id}`);
-              setSubmenu(true);
-            }}
           >
             <TableData data-index={i} className="generation">
               {generation.level}
@@ -49,7 +45,9 @@ const Generations = ({ data }) => {
                 >
                   {(state) =>
                     submenu[1] === i ? (
-                      <GenerationControls></GenerationControls>
+                      <GenerationControls
+                        showForms={showForms}
+                      ></GenerationControls>
                     ) : null
                   }
                 </CSSTransition>

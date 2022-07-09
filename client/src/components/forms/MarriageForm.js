@@ -1,7 +1,6 @@
 import { TreeForm } from "../styled/TreeForm.styled";
 import DatePicker from "react-date-picker";
 import { useState, forwardRef } from "react";
-import { ImUser, ImUsers } from "react-icons/im";
 import { GiLinkedRings } from "react-icons/gi";
 
 const MarriageForm = forwardRef(({ type = "Marriage", level }, ref) => {

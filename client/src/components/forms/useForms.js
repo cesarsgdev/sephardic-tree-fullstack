@@ -4,8 +4,11 @@ const useForms = () => {
   const formActive = useRef();
   const [forms, setForms] = useState(false);
   const [typeOfForm, setTypeOfForm] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
-  const handleForm = (type) => {
+  const handleForm = (type, isEditing) => {
+    setIsEditing(isEditing);
+
     if (type === "Principal")
       if (formActive.current && formActive.current.id !== "Principal") {
         setForms(false);
@@ -53,7 +56,7 @@ const useForms = () => {
     setForms(false);
   };
 
-  return { formActive, forms, typeOfForm, handleForm, hide };
+  return { formActive, forms, typeOfForm, handleForm, hide, isEditing };
 };
 
 export default useForms;
